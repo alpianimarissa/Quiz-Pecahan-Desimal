@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis 30 Soal: Pecahan ke Desimal & Mengurutkan Desimal - Kelas 4 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js untuk efek suara -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 2px, transparent 2px);
+            background-size: 32px 32px;
+        }
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-weight: 800;
+        }
+        .fraction-top {
+            border-bottom: 2.5px solid currentColor;
+            padding: 0 5px;
+            line-height: 1.1;
+        }
+        .fraction-bottom {
+            padding: 0 5px;
+            line-height: 1.1;
+        }
+        .card-shadow {
+            box-shadow: 0 8px 0px rgba(0, 0, 0, 0.08);
+        }
+        .btn-push {
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0px rgba(0, 0, 0, 0.18);
+        }
+        .btn-push:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.18);
+        }
+        /* Custom scrollbar untuk panel navigasi */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #93c5fd;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-yellow-400 text-blue-950 w-11 h-11 rounded-2xl flex items-center justify-center text-2xl font-bold shadow">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-2xl font-bold tracking-wide">Tantangan 30 Soal Matematika</h1>
+                    <p class="text-xs sm:text-sm text-sky-100 font-semibold">Konversi Pecahan ke Desimal & Mengurutkan Desimal (Kelas 4 SD)</p>
+                </div>
+            </div>
+
+            <!-- Status Penyimpanan Otomatis & Skor -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div id="save-indicator" class="hidden sm:flex items-center gap-1.5 bg-emerald-500/25 border border-emerald-300/40 px-3 py-1.5 rounded-full text-xs font-bold text-emerald-100">
+                    <i class="fa-solid fa-cloud-check"></i> <span>Tersimpan Otomatis</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/30">
+                    <i class="fa-solid fa-star text-yellow-300 text-lg"></i>
+                    <span class="font-fun text-base sm:text-lg font-bold">Skor: <span id="header-score">0</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- KOLOM KIRI: AREA SOAL UTAMA (8 Kolom di Desktop) -->
+            <div class="lg:col-span-8 space-y-5">
+                
+                <!-- Kartu Soal -->
+                <div id="quiz-card" class="bg-white rounded-3xl p-5 sm:p-8 border-4 border-sky-200 card-shadow">
+                    <!-- Top Bar Soal -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b-2 border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-blue-600 text-white font-fun font-bold px-3.5 py-1 rounded-xl text-base sm:text-lg">
+                                Soal <span id="current-num-label">1</span> / 30
+                            </span>
+                            <span id="question-topic" class="bg-amber-100 text-amber-800 font-bold text-xs sm:text-sm px-3 py-1 rounded-xl">
+                                Konversi Pecahan
+                            </span>
+                        </div>
+                        <div id="question-status-badge" class="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500">
+                            Belum Dijawab
+                        </div>
+                    </div>
+
+                    <!-- Teks Pertanyaan -->
+                    <div id="question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed mb-6">
+                        Memuat pertanyaan...
+                    </div>
+
+                    <!-- Pilihan Jawaban A, B, C, D -->
+                    <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
+                        <!-- Diisi oleh JS -->
+                    </div>
+
+                    <!-- Kotak Umpan Balik Langsung (Benar/Salah + Pembahasan) -->
+                    <div id="feedback-box" class="hidden rounded-2xl p-4 sm:p-5 border-2 mb-6 transition-all">
+                        <div id="feedback-title" class="font-fun font-bold text-lg sm:text-xl mb-1.5 flex items-center gap-2"></div>
+                        <div id="feedback-explanation" class="text-sm sm:text-base leading-relaxed"></div>
+                    </div>
+
+                    <!-- Tombol Navigasi Bawah -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t-2 border-slate-100">
+                        <button id="btn-prev" onclick="prevQuestion()" class="btn-push bg-slate-200 hover:bg-slate-300 disabled:opacity-40 disabled:cursor-not-allowed text-slate-800 font-fun font-bold px-5 py-2.5 rounded-2xl flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+                        </button>
+
+                        <button id="btn-finish-early" onclick="showSummaryModal()" class="hidden btn-push bg-amber-500 hover:bg-amber-600 text-white font-fun font-bold px-5 py-2.5 rounded-2xl flex items-center gap-2">
+                            <i class="fa-solid fa-flag-checkered"></i> Lihat Hasil Akhir
+                        </button>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="btn-push bg-blue-600 hover:bg-blue-700 text-white font-fun font-bold px-6 py-2.5 rounded-2xl flex items-center gap-2">
+                            Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Layar Hasil Akhir (Muncul saat tombol Lihat Hasil Akhir ditekan) -->
+                <div id="summary-card" class="hidden bg-white rounded-3xl p-6 sm:p-8 border-4 border-amber-300 card-shadow text-center space-y-5">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-yellow-100 text-yellow-500 text-5xl shadow-inner">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Rekap Hasil Kuis 30 Soal</h2>
+                    
+                    <div class="grid grid-cols-3 gap-3 max-w-lg mx-auto">
+                        <div class="bg-emerald-50 border-2 border-emerald-200 p-3 rounded-2xl">
+                            <div class="text-xs font-bold text-emerald-600 uppercase">Benar</div>
+                            <div id="sum-correct" class="text-2xl sm:text-3xl font-extrabold text-emerald-700">0</div>
+                        </div>
+                        <div class="bg-rose-50 border-2 border-rose-200 p-3 rounded-2xl">
+                            <div class="text-xs font-bold text-rose-600 uppercase">Salah</div>
+                            <div id="sum-wrong" class="text-2xl sm:text-3xl font-extrabold text-rose-700">0</div>
+                        </div>
+                        <div class="bg-blue-50 border-2 border-blue-200 p-3 rounded-2xl">
+                            <div class="text-xs font-bold text-blue-600 uppercase">Nilai Akhir</div>
+                            <div id="sum-grade" class="text-2xl sm:text-3xl font-extrabold text-blue-700">0</div>
+                        </div>
+                    </div>
+
+                    <p id="sum-message" class="max-w-lg mx-auto text-slate-700 font-semibold bg-amber-50 border border-amber-200 p-4 rounded-2xl"></p>
+
+                    <div class="flex flex-wrap justify-center gap-3 pt-2">
+                        <button onclick="hideSummaryModal()" class="btn-push bg-sky-600 hover:bg-sky-700 text-white font-fun font-bold px-6 py-3 rounded-2xl flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Tinjau Kembali Soal
+                        </button>
+                        <button onclick="openResetConfirm()" class="btn-push bg-rose-500 hover:bg-rose-600 text-white font-fun font-bold px-6 py-3 rounded-2xl flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis dari Awal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: PANEL NAVIGASI SOAL (4 Kolom di Desktop) -->
+            <aside class="lg:col-span-4 space-y-5">
+                <div class="bg-white rounded-3xl p-5 border-4 border-indigo-200 card-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-fun font-bold text-lg text-indigo-900 flex items-center gap-2">
+                            <i class="fa-solid fa-table-cells"></i> Navigasi Nomor Soal
+                        </h3>
+                        <span class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg">
+                            <span id="answered-count">0</span>/30 Terisi
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-4">
+                        <div id="nav-progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Grid 30 Nomor -->
+                    <div id="nav-grid" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-2 mb-4">
+                        <!-- Diisi oleh JS -->
+                    </div>
+
+                    <!-- Legenda Warna -->
+                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-600 bg-slate-50 p-3 rounded-2xl border border-slate-200 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-emerald-500 inline-block shrink-0"></span> Benar
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-rose-500 inline-block shrink-0"></span> Salah
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-white border-2 border-slate-300 inline-block shrink-0"></span> Belum Diisi
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded ring-2 ring-blue-600 bg-blue-100 inline-block shrink-0"></span> Aktif
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Panel -->
+                    <div class="space-y-2.5">
+                        <button onclick="showSummaryModal()" class="w-full btn-push bg-amber-400 hover:bg-amber-500 text-amber-950 font-fun font-bold py-2.5 px-4 rounded-2xl flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-chart-pie"></i> Cek Skor & Hasil Akhir
+                        </button>
+                        <button onclick="openResetConfirm()" class="w-full bg-slate-100 hover:bg-rose-100 text-slate-600 hover:text-rose-700 font-bold text-xs py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-trash-can"></i> Reset Semua Jawaban
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Penyimpanan Offline -->
+                <div class="bg-sky-100/80 border-2 border-sky-300 rounded-2xl p-4 text-xs sm:text-sm text-sky-900 flex items-start gap-3">
+                    <i class="fa-solid fa-shield-halved text-sky-600 text-xl mt-0.5"></i>
+                    <div>
+                        <p class="font-bold">Aman Jika Ter-reload / Putus Jaringan!</p>
+                        <p class="text-sky-800 mt-0.5">Setiap jawaban yang kamu pilih langsung tersimpan otomatis di perangkat ini.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Custom Modal Konfirmasi Reset (Pengganti confirm()) -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 border-4 border-rose-200 shadow-2xl text-center space-y-4">
+            <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800">Ulangi Kuis dari Awal?</h3>
+            <p class="text-slate-600 text-sm sm:text-base">Semua jawaban dan skormu pada 30 soal ini akan dihapus dan diulang dari soal nomor 1.</p>
+            <div class="flex gap-3 justify-center pt-2">
+                <button onclick="closeResetConfirm()" class="btn-push bg-slate-200 hover:bg-slate-300 text-slate-800 font-fun font-bold px-5 py-2.5 rounded-2xl">
+                    Batal
+                </button>
+                <button onclick="confirmResetQuiz()" class="btn-push bg-rose-600 hover:bg-rose-700 text-white font-fun font-bold px-5 py-2.5 rounded-2xl">
+                    Ya, Reset Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Helper format pecahan HTML agar rapi
+        const f = (top, bottom) => `<span class="fraction"><span class="fraction-top">${top}</span><span class="fraction-bottom">${bottom}</span></span>`;
+
+        // =====================================================================
+        // BANK 30 SOAL VARIATIF KELAS 4 SD
+        // Distribusi kunci jawaban (ans):
+        // Index 0 (A): 7 soal | Index 1 (B): 8 soal | Index 2 (C): 8 soal | Index 3 (D): 7 soal
+        // Total = 30 soal, diacak tanpa pola berulang!
+        // =====================================================================
+        const questionsData = [
+            // Soal 1 - Kunci: C (2)
+            {
+                id: 1,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari pecahan ${f(7, 10)} adalah...`,
+                options: ["7,0", "0,07", "0,7", "1,7"],
+                ans: 2,
+                exp: `Penyebutnya adalah 10, artinya ada 1 angka di belakang koma. Jadi ${f(7, 10)} = <strong>0,7</strong>.`
+            },
+            // Soal 2 - Kunci: A (0)
+            {
+                id: 2,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Pecahan ${f(3, 5)} jika diubah menjadi bilangan desimal menjadi...`,
+                options: ["0,6", "0,35", "3,5", "0,06"],
+                ans: 0,
+                exp: `Kalikan pembilang dan penyebut dengan 2 agar penyebutnya menjadi 10: ${f("3 × 2", "5 × 2")} = ${f(6, 10)} = <strong>0,6</strong>.`
+            },
+            // Soal 3 - Kunci: D (3)
+            {
+                id: 3,
+                topic: "Mengurutkan Desimal",
+                q: `Perhatikan bilangan berikut: <strong>0,45 ; 0,8 ; 0,15 ; 0,6</strong>. Urutan dari yang <strong>terkecil ke terbesar</strong> adalah...`,
+                options: [
+                    "0,8 ; 0,6 ; 0,45 ; 0,15",
+                    "0,15 ; 0,6 ; 0,8 ; 0,45",
+                    "0,45 ; 0,15 ; 0,6 ; 0,8",
+                    "0,15 ; 0,45 ; 0,6 ; 0,8"
+                ],
+                ans: 3,
+                exp: `Samakan menjadi 2 angka di belakang koma: 0,45 ; 0,80 ; 0,15 ; 0,60. Urutan dari yang terkecil adalah <strong>0,15 ; 0,45 ; 0,6 ; 0,8</strong>.`
+            },
+            // Soal 4 - Kunci: B (1)
+            {
+                id: 4,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari pecahan ${f(1, 4)} adalah...`,
+                options: ["0,14", "0,25", "0,4", "1,4"],
+                ans: 1,
+                exp: `Kalikan pembilang dan penyebut dengan 25 agar penyebutnya 100: ${f("1 × 25", "4 × 25")} = ${f(25, 100)} = <strong>0,25</strong>.`
+            },
+            // Soal 5 - Kunci: D (3)
+            {
+                id: 5,
+                topic: "Membandingkan Desimal",
+                q: `Manakah pernyataan perbandingan bilangan desimal di bawah ini yang <strong>benar</strong>?`,
+                options: [
+                    "0,35 > 0,5",
+                    "0,7 < 0,49",
+                    "1,2 = 1,02",
+                    "0,8 > 0,75"
+                ],
+                ans: 3,
+                exp: `0,8 sama dengan <strong>0,80</strong>. Karena 0,80 lebih besar daripada 0,75, maka pernyataan <strong>0,8 > 0,75</strong> adalah benar.`
+            },
+            // Soal 6 - Kunci: A (0)
+            {
+                id: 6,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Ubahlah pecahan ${f(17, 100)} ke dalam bentuk desimal!`,
+                options: ["0,17", "1,7", "0,017", "17,0"],
+                ans: 0,
+                exp: `Karena penyebutnya 100, harus ada 2 angka di belakang koma. Maka ${f(17, 100)} = <strong>0,17</strong>.`
+            },
+            // Soal 7 - Kunci: C (2)
+            {
+                id: 7,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari ${f(3, 100)} adalah...`,
+                options: ["0,3", "3,0", "0,03", "0,30"],
+                ans: 2,
+                exp: `Per 100 artinya ada 2 angka di belakang koma. Karena pembilangnya hanya satu angka (3), tambahkan nol di depannya menjadi <strong>0,03</strong>.`
+            },
+            // Soal 8 - Kunci: B (1)
+            {
+                id: 8,
+                topic: "Mengurutkan Desimal",
+                q: `Urutkan bilangan berikut dari yang <strong>terbesar ke terkecil</strong>: <strong>1,3 ; 0,95 ; 1,08 ; 1,45</strong>`,
+                options: [
+                    "1,3 ; 1,45 ; 1,08 ; 0,95",
+                    "1,45 ; 1,3 ; 1,08 ; 0,95",
+                    "0,95 ; 1,08 ; 1,3 ; 1,45",
+                    "1,45 ; 1,08 ; 1,3 ; 0,95"
+                ],
+                ans: 1,
+                exp: `Ubah ke 2 angka di belakang koma: 1,30 ; 0,95 ; 1,08 ; 1,45. Dari terbesar ke terkecil: <strong>1,45 ; 1,3 ; 1,08 ; 0,95</strong>.`
+            },
+            // Soal 9 - Kunci: C (2)
+            {
+                id: 9,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Pecahan ${f(9, 20)} jika ditulis dalam bentuk desimal adalah...`,
+                options: ["0,92", "0,18", "0,45", "0,09"],
+                ans: 2,
+                exp: `Kalikan pembilang dan penyebut dengan 5 supaya penyebutnya menjadi 100: ${f("9 × 5", "20 × 5")} = ${f(45, 100)} = <strong>0,45</strong>.`
+            },
+            // Soal 10 - Kunci: A (0)
+            {
+                id: 10,
+                topic: "Soal Cerita Desimal",
+                q: `Siti membeli pita sepanjang ${f(4, 5)} meter. Panjang pita Siti dalam bentuk desimal adalah...`,
+                options: ["0,8 meter", "0,45 meter", "0,4 meter", "4,5 meter"],
+                ans: 0,
+                exp: `${f("4 × 2", "5 × 2")} = ${f(8, 10)} = <strong>0,8 meter</strong>.`
+            },
+            // Soal 11 - Kunci: D (3)
+            {
+                id: 11,
+                topic: "Mengurutkan Desimal",
+                q: `Diketahui empat bilangan desimal: <strong>0,6 ; 0,06 ; 0,66 ; 0,16</strong>. Bilangan yang nilainya <strong>paling kecil</strong> adalah...`,
+                options: ["0,6", "0,16", "0,66", "0,06"],
+                ans: 3,
+                exp: `Samakan menjadi 2 angka di belakang koma: 0,60 ; 0,06 ; 0,66 ; 0,16. Yang paling kecil adalah <strong>0,06</strong>.`
+            },
+            // Soal 12 - Kunci: B (1)
+            {
+                id: 12,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari pecahan ${f(11, 25)} adalah...`,
+                options: ["0,11", "0,44", "0,22", "1,1"],
+                ans: 1,
+                exp: `Kalikan pembilang dan penyebut dengan 4: ${f("11 × 4", "25 × 4")} = ${f(44, 100)} = <strong>0,44</strong>.`
+            },
+            // Soal 13 - Kunci: C (2)
+            {
+                id: 13,
+                topic: "Pecahan Campuran → Desimal",
+                q: `Bentuk desimal dari pecahan campuran <strong>2 ${f(1, 2)}</strong> adalah...`,
+                options: ["2,12", "0,25", "2,5", "21,2"],
+                ans: 2,
+                exp: `Bilangan bulatnya adalah 2, sedangkan ${f(1, 2)} = ${f(5, 10)} = 0,5. Gabungkan menjadi 2 + 0,5 = <strong>2,5</strong>.`
+            },
+            // Soal 14 - Kunci: A (0)
+            {
+                id: 14,
+                topic: "Mengurutkan Desimal",
+                q: `Data berat semangka hasil panen Pak Tani:<br>• Semangka A: <strong>3,4 kg</strong><br>• Semangka B: <strong>3,15 kg</strong><br>• Semangka C: <strong>3,75 kg</strong><br>• Semangka D: <strong>3,09 kg</strong><br>Urutan semangka dari yang <strong>paling ringan ke paling berat</strong> adalah...`,
+                options: [
+                    "D, B, A, C",
+                    "B, D, A, C",
+                    "D, A, B, C",
+                    "C, A, B, D"
+                ],
+                ans: 0,
+                exp: `Samakan komanya: A = 3,40 kg; B = 3,15 kg; C = 3,75 kg; D = 3,09 kg. Dari paling ringan: <strong>D (3,09), B (3,15), A (3,40), C (3,75)</strong>.`
+            },
+            // Soal 15 - Kunci: D (3)
+            {
+                id: 15,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Pecahan ${f(3, 8)} jika diubah menjadi bilangan desimal hasilnya adalah...`,
+                options: ["0,38", "0,3", "0,83", "0,375"],
+                ans: 3,
+                exp: `Dengan pembagian bersusun 3 ÷ 8 = <strong>0,375</strong> (atau kalikan pembilang dan penyebut dengan 125 menjadi ${f(375, 1000)} = 0,375).`
+            },
+            // Soal 16 - Kunci: B (1)
+            {
+                id: 16,
+                topic: "Pecahan Campuran → Desimal",
+                q: `Bentuk desimal dari <strong>1 ${f(3, 4)}</strong> adalah...`,
+                options: ["1,34", "1,75", "1,25", "13,4"],
+                ans: 1,
+                exp: `Bilangan bulatnya 1, dan pecahan ${f(3, 4)} = ${f(75, 100)} = 0,75. Jadi 1 + 0,75 = <strong>1,75</strong>.`
+            },
+            // Soal 17 - Kunci: C (2)
+            {
+                id: 17,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari ${f(12, 50)} adalah...`,
+                options: ["0,12", "1,2", "0,24", "0,024"],
+                ans: 2,
+                exp: `Kalikan pembilang dan penyebut dengan 2 agar penyebut menjadi 100: ${f("12 × 2", "50 × 2")} = ${f(24, 100)} = <strong>0,24</strong>.`
+            },
+            // Soal 18 - Kunci: A (0)
+            {
+                id: 18,
+                topic: "Mengurutkan Desimal",
+                q: `Bilangan desimal yang terletak di antara <strong>0,4</strong> dan <strong>0,5</strong> adalah...`,
+                options: ["0,46", "0,54", "0,39", "0,04"],
+                ans: 0,
+                exp: `0,4 = 0,40 dan 0,5 = 0,50. Bilangan yang berada di antara 0,40 dan 0,50 adalah <strong>0,46</strong>.`
+            },
+            // Soal 19 - Kunci: D (3)
+            {
+                id: 19,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Pecahan biasa ${f(15, 10)} jika ditulis dalam bentuk desimal adalah...`,
+                options: ["0,15", "15,0", "0,015", "1,5"],
+                ans: 3,
+                exp: `Karena penyebutnya 10, geser koma 1 langkah dari kanan: ${f(15, 10)} = <strong>1,5</strong>.`
+            },
+            // Soal 20 - Kunci: B (1)
+            {
+                id: 20,
+                topic: "Soal Cerita & Urutan",
+                q: `Empat pelari mencatatkan waktu lomba lari 100 meter:<br>• Edo: <strong>14,8 detik</strong><br>• Beni: <strong>14,25 detik</strong><br>• Udin: <strong>14,5 detik</strong><br>• Dayu: <strong>14,19 detik</strong><br>Siapakah pemenang lomba lari tersebut (waktu paling cepat/sedikit)?`,
+                options: ["Edo", "Dayu", "Beni", "Udin"],
+                ans: 1,
+                exp: `Samakan komanya: Edo 14,80; Beni 14,25; Udin 14,50; Dayu 14,19. Waktu paling cepat (angka terkecil) adalah <strong>Dayu (14,19 detik)</strong>.`
+            },
+            // Soal 21 - Kunci: C (2)
+            {
+                id: 21,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari ${f(6, 15)} adalah... (Petunjuk: sederhanakan pecahannya dulu!)`,
+                options: ["0,6", "0,15", "0,4", "0,65"],
+                ans: 2,
+                exp: `Sederhanakan ${f(6, 15)} dengan membagi pembilang dan penyebut dengan 3 → ${f(2, 5)}. Lalu ubah ke per 10: ${f("2 × 2", "5 × 2")} = ${f(4, 10)} = <strong>0,4</strong>.`
+            },
+            // Soal 22 - Kunci: A (0)
+            {
+                id: 22,
+                topic: "Mengurutkan Desimal",
+                q: `Urutan bilangan berikut dari yang <strong>terkecil ke terbesar</strong> adalah: <strong>2,5 ; 2,05 ; 2,55 ; 2,15</strong>`,
+                options: [
+                    "2,05 ; 2,15 ; 2,5 ; 2,55",
+                    "2,5 ; 2,05 ; 2,15 ; 2,55",
+                    "2,05 ; 2,5 ; 2,15 ; 2,55",
+                    "2,55 ; 2,5 ; 2,15 ; 2,05"
+                ],
+                ans: 0,
+                exp: `Samakan menjadi 2 angka di belakang koma: 2,50 ; 2,05 ; 2,55 ; 2,15. Urutan dari terkecil adalah <strong>2,05 ; 2,15 ; 2,5 ; 2,55</strong>.`
+            },
+            // Soal 23 - Kunci: B (1)
+            {
+                id: 23,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Pecahan ${f(18, 25)} senilai dengan bilangan desimal...`,
+                options: ["0,18", "0,72", "0,36", "1,8"],
+                ans: 1,
+                exp: `Kalikan pembilang dan penyebut dengan 4: ${f("18 × 4", "25 × 4")} = ${f(72, 100)} = <strong>0,72</strong>.`
+            },
+            // Soal 24 - Kunci: D (3)
+            {
+                id: 24,
+                topic: "Mengurutkan Desimal",
+                q: `Perhatikan urutan bilangan berikut: <strong>0,9 ; 0,72 ; [ X ] ; 0,35</strong>. Jika urutan tersebut disusun dari yang <strong>terbesar ke terkecil</strong>, bilangan yang tepat untuk menggantikan <strong>[ X ]</strong> adalah...`,
+                options: ["0,85", "0,28", "0,95", "0,5"],
+                ans: 3,
+                exp: `Bilangan [ X ] harus lebih kecil dari 0,72 dan lebih besar dari 0,35. Dari pilihan yang ada, <strong>0,5</strong> (0,50) berada di antara 0,72 dan 0,35.`
+            },
+            // Soal 25 - Kunci: C (2)
+            {
+                id: 25,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari ${f(125, 1000)} adalah...`,
+                options: ["12,5", "1,25", "0,125", "0,0125"],
+                ans: 2,
+                exp: `Karena penyebutnya 1.000, maka ada 3 angka di belakang koma. Jadi ${f(125, 1000)} = <strong>0,125</strong>.`
+            },
+            // Soal 26 - Kunci: A (0)
+            {
+                id: 26,
+                topic: "Pecahan Campuran → Desimal",
+                q: `Ayah membeli <strong>3 ${f(2, 5)}</strong> kg jeruk. Berat jeruk yang dibeli ayah dalam bentuk desimal adalah...`,
+                options: ["3,4 kg", "3,25 kg", "3,2 kg", "0,34 kg"],
+                ans: 0,
+                exp: `Bilangan bulatnya 3, sedangkan ${f(2, 5)} = ${f(4, 10)} = 0,4. Jadi 3 + 0,4 = <strong>3,4 kg</strong>.`
+            },
+            // Soal 27 - Kunci: B (1)
+            {
+                id: 27,
+                topic: "Mengurutkan Desimal",
+                q: `Manakah kelompok bilangan desimal berikut yang sudah terurut dari yang <strong>terbesar ke terkecil</strong>?`,
+                options: [
+                    "0,4 ; 0,45 ; 0,5 ; 0,55",
+                    "1,8 ; 1,65 ; 1,2 ; 0,98",
+                    "0,75 ; 0,8 ; 0,65 ; 0,5",
+                    "2,1 ; 2,09 ; 2,3 ; 2,01"
+                ],
+                ans: 1,
+                exp: `Pada opsi B: 1,80 > 1,65 > 1,20 > 0,98. Semua sudah tersusun tepat dari yang <strong>terbesar ke terkecil</strong>.`
+            },
+            // Soal 28 - Kunci: C (2)
+            {
+                id: 28,
+                topic: "Konversi Pecahan → Desimal",
+                q: `Bentuk desimal dari ${f(9, 12)} adalah... (Petunjuk: sederhanakan pecahannya dulu!)`,
+                options: ["0,9", "0,12", "0,75", "0,25"],
+                ans: 2,
+                exp: `Sederhanakan ${f(9, 12)} dengan membagi pembilang dan penyebut dengan 3 menjadi ${f(3, 4)}. Lalu ${f("3 × 25", "4 × 25")} = ${f(75, 100)} = <strong>0,75</strong>.`
+            },
+            // Soal 29 - Kunci: D (3)
+            {
+                id: 29,
+                topic: "Soal Cerita Desimal",
+                q: `Sebuah botol berisi air sebanyak ${f(7, 20)} liter. Jika dituang ke gelas ukur berskala desimal, angka yang ditunjukkan adalah...`,
+                options: ["0,7 liter", "0,07 liter", "0,72 liter", "0,35 liter"],
+                ans: 3,
+                exp: `Kalikan pembilang dan penyebut dengan 5: ${f("7 × 5", "20 × 5")} = ${f(35, 100)} = <strong>0,35 liter</strong>.`
+            },
+            // Soal 30 - Kunci: B (1)
+            {
+                id: 30,
+                topic: "Mengurutkan Desimal & Pecahan",
+                q: `Tinggi tanaman hias di taman sekolah:<br>• Melati: <strong>0,65 m</strong><br>• Mawar: <strong>0,8 m</strong><br>• Anggrek: <strong>0,58 m</strong><br>• Kamboja: <strong>0,75 m</strong><br>Urutan tanaman dari yang <strong>paling tinggi ke paling pendek</strong> adalah...`,
+                options: [
+                    "Kamboja, Mawar, Melati, Anggrek",
+                    "Mawar, Kamboja, Melati, Anggrek",
+                    "Anggrek, Melati, Kamboja, Mawar",
+                    "Mawar, Melati, Kamboja, Anggrek"
+                ],
+                ans: 1,
+                exp: `Samakan komanya: Melati 0,65 m; Mawar 0,80 m; Anggrek 0,58 m; Kamboja 0,75 m. Dari tertinggi ke terpendek: <strong>Mawar (0,80), Kamboja (0,75), Melati (0,65), Anggrek (0,58)</strong>.`
+            }
+        ];
+
+        // =====================================================================
+        // STATE & PENYIMPANAN OTOMATIS (LOCALSTORAGE)
+        // =====================================================================
+        const STORAGE_KEY = "kuis_30_pecahan_desimal_kls4_v1";
+
+        let state = {
+            currentIndex: 0,
+            // answers[i] = null jika belum dijawab, atau index pilihan (0,1,2,3)
+            answers: new Array(questionsData.length).fill(null)
+        };
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed.answers) && parsed.answers.length === questionsData.length) {
+                        state.answers = parsed.answers;
+                    }
+                    if (typeof parsed.currentIndex === "number" && parsed.currentIndex >= 0 && parsed.currentIndex < questionsData.length) {
+                        state.currentIndex = parsed.currentIndex;
+                    }
+                }
+            } catch (e) {
+                console.warn("Gagal memuat penyimpanan lokal:", e);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                const ind = document.getElementById("save-indicator");
+                if (ind) {
+                    ind.classList.add("scale-105");
+                    setTimeout(() => ind.classList.remove("scale-105"), 200);
+                }
+            } catch (e) {
+                console.warn("Gagal menyimpan ke penyimpanan lokal:", e);
+            }
+        }
+
+        // =====================================================================
+        // EFEK SUARA (TONE.JS)
+        // =====================================================================
+        let synth;
+        function playSound(type) {
+            try {
+                if (!synth) {
+                    synth = new Tone.PolySynth(Tone.Synth).toDestination();
+                }
+                if (Tone.context.state !== "running") {
+                    Tone.start();
+                }
+                if (type === "correct") {
+                    synth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
+                } else if (type === "wrong") {
+                    synth.triggerAttackRelease(["A3", "G#3"], "8n");
+                } else if (type === "click") {
+                    synth.triggerAttackRelease(["C5"], "32n");
+                }
+            } catch (e) {
+                // Abaikan jika browser memblokir audio
+            }
+        }
+
+        // =====================================================================
+        // RENDER & LOGIKA KUIS
+        // =====================================================================
+        function calculateStats() {
+            let answered = 0;
+            let correct = 0;
+            let wrong = 0;
+
+            state.answers.forEach((ans, idx) => {
+                if (ans !== null) {
+                    answered++;
+                    if (ans === questionsData[idx].ans) {
+                        correct++;
+                    } else {
+                        wrong++;
+                    }
+                }
+            });
+
+            return { answered, correct, wrong };
+        }
+
+        function updateHeaderAndNav() {
+            const stats = calculateStats();
+            const grade = Math.round((stats.correct / questionsData.length) * 100);
+
+            document.getElementById("header-score").textContent = `${stats.correct} Benar (${grade})`;
+            document.getElementById("answered-count").textContent = stats.answered;
+            document.getElementById("nav-progress-bar").style.width = `${(stats.answered / questionsData.length) * 100}%`;
+
+            // Render Grid Navigasi 30 Nomor
+            const navGrid = document.getElementById("nav-grid");
+            navGrid.innerHTML = questionsData.map((q, idx) => {
+                const userAns = state.answers[idx];
+                const isActive = idx === state.currentIndex;
+
+                let btnStyle = "bg-white border-2 border-slate-300 text-slate-700 hover:bg-sky-50";
+                if (userAns !== null) {
+                    if (userAns === q.ans) {
+                        btnStyle = "bg-emerald-500 border-2 border-emerald-600 text-white";
+                    } else {
+                        btnStyle = "bg-rose-500 border-2 border-rose-600 text-white";
+                    }
+                }
+
+                const activeRing = isActive ? "ring-4 ring-blue-500/50 scale-105 z-10" : "";
+
+                return `
+                    <button onclick="goToQuestion(${idx})" class="h-10 rounded-xl font-fun font-bold text-sm transition flex items-center justify-center ${btnStyle} ${activeRing}">
+                        ${idx + 1}
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function renderCurrentQuestion() {
+            const idx = state.currentIndex;
+            const q = questionsData[idx];
+            const userAns = state.answers[idx];
+            const isAnswered = userAns !== null;
+
+            // Pastikan tampilan kartu soal terlihat jika sedang membuka rekap
+            document.getElementById("summary-card").classList.add("hidden");
+            document.getElementById("quiz-card").classList.remove("hidden");
+
+            document.getElementById("current-num-label").textContent = idx + 1;
+            document.getElementById("question-topic").textContent = q.topic;
+            document.getElementById("question-text").innerHTML = q.q;
+
+            // Status badge soal
+            const badge = document.getElementById("question-status-badge");
+            if (!isAnswered) {
+                badge.className = "text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-500";
+                badge.innerHTML = `<i class="fa-regular fa-circle"></i> Belum Dijawab`;
+            } else if (userAns === q.ans) {
+                badge.className = "text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700";
+                badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Jawaban Benar`;
+            } else {
+                badge.className = "text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-rose-100 text-rose-700";
+                badge.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Jawaban Salah`;
+            }
+
+            // Render Pilihan A, B, C, D
+            const letters = ["A", "B", "C", "D"];
+            const optionsContainer = document.getElementById("options-container");
+            optionsContainer.innerHTML = q.options.map((optText, optIdx) => {
+                let cardClass = "border-slate-200 bg-white hover:bg-sky-50 hover:border-sky-400 text-slate-800 cursor-pointer";
+                let letterClass = "bg-sky-100 text-sky-700";
+                let statusIcon = "";
+
+                if (isAnswered) {
+                    cardClass = "border-slate-200 bg-slate-50 text-slate-400 cursor-default";
+                    letterClass = "bg-slate-200 text-slate-500";
+
+                    if (optIdx === q.ans) {
+                        // Kunci jawaban benar selalu disorot hijau
+                        cardClass = "border-emerald-500 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-400/40 cursor-default";
+                        letterClass = "bg-emerald-500 text-white";
+                        statusIcon = `<i class="fa-solid fa-circle-check text-emerald-600 text-xl ml-auto"></i>`;
+                    } else if (optIdx === userAns && userAns !== q.ans) {
+                        // Pilihan user yang salah disorot merah
+                        cardClass = "border-rose-500 bg-rose-50 text-rose-950 ring-2 ring-rose-400/40 cursor-default";
+                        letterClass = "bg-rose-500 text-white";
+                        statusIcon = `<i class="fa-solid fa-circle-xmark text-rose-600 text-xl ml-auto"></i>`;
+                    }
+                }
+
+                return `
+                    <button onclick="selectOption(${optIdx})" ${isAnswered ? "disabled" : ""} class="text-left p-4 rounded-2xl border-2 font-bold text-base sm:text-lg transition flex items-center gap-3.5 ${cardClass}">
+                        <span class="w-9 h-9 rounded-xl flex items-center justify-center font-fun font-extrabold shrink-0 ${letterClass}">
+                            ${letters[optIdx]}
+                        </span>
+                        <span class="leading-snug">${optText}</span>
+                        ${statusIcon}
+                    </button>
+                `;
+            }).join("");
+
+            // Render Feedback Langsung jika sudah dijawab
+            const feedbackBox = document.getElementById("feedback-box");
+            const feedbackTitle = document.getElementById("feedback-title");
+            const feedbackExp = document.getElementById("feedback-explanation");
+
+            if (isAnswered) {
+                feedbackBox.classList.remove("hidden");
+                if (userAns === q.ans) {
+                    feedbackBox.className = "rounded-2xl p-4 sm:p-5 border-2 mb-6 bg-emerald-50 border-emerald-300 text-emerald-950";
+                    feedbackTitle.innerHTML = `<i class="fa-solid fa-face-smile-beam text-emerald-600 text-2xl"></i> <span>Hebat! Jawabanmu BENAR!</span>`;
+                } else {
+                    feedbackBox.className = "rounded-2xl p-4 sm:p-5 border-2 mb-6 bg-rose-50 border-rose-300 text-rose-950";
+                    feedbackTitle.innerHTML = `<i class="fa-solid fa-face-sad-tear text-rose-600 text-2xl"></i> <span>Yah, Jawabanmu Kurang Tepat!</span>`;
+                }
+                feedbackExp.innerHTML = `<strong>Pembahasan:</strong> ${q.exp}`;
+            } else {
+                feedbackBox.classList.add("hidden");
+            }
+
+            // Atur tombol Sebelumnya / Selanjutnya / Selesai
+            document.getElementById("btn-prev").disabled = idx === 0;
+
+            const btnNext = document.getElementById("btn-next");
+            const btnFinish = document.getElementById("btn-finish-early");
+
+            if (idx === questionsData.length - 1) {
+                btnNext.classList.add("hidden");
+                btnFinish.classList.remove("hidden");
+            } else {
+                btnNext.classList.remove("hidden");
+                btnFinish.classList.add("hidden");
+            }
+
+            updateHeaderAndNav();
+        }
+
+        function selectOption(optIdx) {
+            const idx = state.currentIndex;
+            if (state.answers[idx] !== null) return; // Tidak bisa ubah jika sudah terjawab
+
+            state.answers[idx] = optIdx;
+            saveState();
+
+            if (optIdx === questionsData[idx].ans) {
+                playSound("correct");
+            } else {
+                playSound("wrong");
+            }
+
+            renderCurrentQuestion();
+        }
+
+        function goToQuestion(idx) {
+            playSound("click");
+            state.currentIndex = idx;
+            saveState();
+            renderCurrentQuestion();
+        }
+
+        function prevQuestion() {
+            if (state.currentIndex > 0) {
+                goToQuestion(state.currentIndex - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentIndex < questionsData.length - 1) {
+                goToQuestion(state.currentIndex + 1);
+            }
+        }
+
+        // =====================================================================
+        // HALAMAN REKAP HASIL AKHIR & RESET
+        // =====================================================================
+        function showSummaryModal() {
+            playSound("click");
+            const stats = calculateStats();
+            const grade = Math.round((stats.correct / questionsData.length) * 100);
+
+            document.getElementById("sum-correct").textContent = stats.correct;
+            document.getElementById("sum-wrong").textContent = stats.wrong;
+            document.getElementById("sum-grade").textContent = grade;
+
+            const msgEl = document.getElementById("sum-message");
+            if (stats.answered < questionsData.length) {
+                msgEl.textContent = `Kamu baru menjawab ${stats.answered} dari 30 soal. Klik "Tinjau Kembali Soal" untuk menyelesaikan soal yang masih kosong!`;
+            } else if (grade >= 85) {
+                msgEl.textContent = "Luar biasa! Kamu sudah sangat menguasai materi konversi pecahan ke desimal dan mengurutkan bilangan desimal!";
+            } else if (grade >= 70) {
+                msgEl.textContent = "Bagus sekali! Terus berlatih pada soal yang masih salah agar nilaimu semakin sempurna!";
+            } else {
+                msgEl.textContent = "Tetap semangat! Yuk periksa kembali pembahasan di setiap nomor yang salah agar makin paham!";
+            }
+
+            document.getElementById("quiz-card").classList.add("hidden");
+            document.getElementById("summary-card").classList.remove("hidden");
+        }
+
+        function hideSummaryModal() {
+            playSound("click");
+            renderCurrentQuestion();
+        }
+
+        function openResetConfirm() {
+            playSound("click");
+            const modal = document.getElementById("reset-modal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeResetConfirm() {
+            playSound("click");
+            const modal = document.getElementById("reset-modal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        function confirmResetQuiz() {
+            playSound("click");
+            state.currentIndex = 0;
+            state.answers = new Array(questionsData.length).fill(null);
+            saveState();
+            closeResetConfirm();
+            renderCurrentQuestion();
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.onload = function() {
+            loadState();
+            renderCurrentQuestion();
+        };
+    </script>
+</body>
+</html>
