@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Pecahan & Desimal - Kelas 4 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Nunito & Fredoka untuk tampilan ramah anak -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js untuk efek suara interaktif -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff;
+            background-image: radial-gradient(#bae6fd 2px, transparent 2px);
+            background-size: 32px 32px;
+        }
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-weight: 800;
+        }
+        .fraction-top {
+            border-bottom: 3px solid currentColor;
+            padding: 0 6px;
+            line-height: 1.1;
+        }
+        .fraction-bottom {
+            padding: 0 6px;
+            line-height: 1.1;
+        }
+        .card-shadow {
+            box-shadow: 0 8px 0px rgba(0, 0, 0, 0.08);
+        }
+        .btn-push {
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0px rgba(0, 0, 0, 0.2);
+        }
+        .btn-push:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2.5s infinite ease-in-out;
+        }
+        .grid-100 {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+        }
+        .grid-10 {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <div class="bg-yellow-400 text-blue-900 w-11 h-11 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-md animate-bounce-slow">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-wide">Matematika Seru Kelas 4</h1>
+                    <p class="text-xs sm:text-sm text-sky-100 font-semibold">Mengubah Pecahan ke Desimal & Mengurutkan Desimal</p>
+                </div>
+            </div>
+            
+            <!-- Skor Bintang -->
+            <div class="flex items-center gap-3 bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/30">
+                <i class="fa-solid fa-star text-yellow-300 text-xl"></i>
+                <span class="font-fun text-lg font-bold"><span id="total-stars">0</span> Bintang</span>
+            </div>
+        </div>
+
+        <!-- Tab Navigasi -->
+        <nav class="bg-blue-800/40 backdrop-blur-md">
+            <div class="max-w-5xl mx-auto px-2 py-2 flex overflow-x-auto gap-2 no-scrollbar">
+                <button onclick="switchTab('tab-konsep')" id="btn-tab-konsep" class="tab-btn flex-1 min-w-[130px] py-2 px-3 rounded-xl font-fun font-semibold text-sm sm:text-base bg-yellow-400 text-blue-950 shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> 1. Kenalan Yuk!
+                </button>
+                <button onclick="switchTab('tab-ubah')" id="btn-tab-ubah" class="tab-btn flex-1 min-w-[130px] py-2 px-3 rounded-xl font-fun font-semibold text-sm sm:text-base bg-white/15 hover:bg-white/25 text-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 2. Ubah ke Desimal
+                </button>
+                <button onclick="switchTab('tab-urut')" id="btn-tab-urut" class="tab-btn flex-1 min-w-[130px] py-2 px-3 rounded-xl font-fun font-semibold text-sm sm:text-base bg-white/15 hover:bg-white/25 text-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-up-1-9"></i> 3. Urutkan Desimal
+                </button>
+                <button onclick="switchTab('tab-kuis')" id="btn-tab-kuis" class="tab-btn flex-1 min-w-[130px] py-2 px-3 rounded-xl font-fun font-semibold text-sm sm:text-base bg-white/15 hover:bg-white/25 text-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-trophy"></i> 4. Latihan & Kuis
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6 space-y-8">
+
+        <!-- ========================================================= -->
+        <!-- TAB 1: KONSEP DASAR DESIMAL                               -->
+        <!-- ========================================================= -->
+        <section id="tab-konsep" class="tab-content space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border-4 border-sky-200 card-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-sky-100 text-sky-600 p-3 rounded-2xl text-2xl"><i class="fa-solid fa-lightbulb"></i></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-sky-700">Apa itu Bilangan Desimal?</h2>
+                </div>
+                <p class="text-base sm:text-lg text-slate-700 leading-relaxed mb-4">
+                    Halo teman-teman kelas 4! Pernahkah kalian melihat angka yang memakai tanda <strong>koma (,)</strong> seperti <span class="bg-yellow-200 px-2 py-0.5 rounded-lg font-bold text-slate-900">0,5</span> atau <span class="bg-yellow-200 px-2 py-0.5 rounded-lg font-bold text-slate-900">2,75</span>? Nah, itulah yang disebut <strong>Bilangan Desimal</strong>!
+                </p>
+                <p class="text-base sm:text-lg text-slate-700 leading-relaxed mb-6">
+                    Bilangan desimal adalah cara lain untuk menuliskan <strong>pecahan</strong> yang penyebutnya adalah <strong>10, 100, 1.000</strong>, dan seterusnya. Tanda koma memisahkan bagian bilangan bulat (di sebelah kiri) dan bagian pecahan (di sebelah kanan).
+                </p>
+
+                <!-- Tabel Nilai Tempat -->
+                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-200 mb-6">
+                    <h3 class="text-xl font-bold text-amber-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-table-cells"></i> Mengenal Nilai Tempat Desimal
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-700 mb-4">Perhatikan angka <strong class="text-xl text-blue-600">12,34</strong> berikut ini:</p>
+                    
+                    <div class="grid grid-cols-5 gap-2 text-center max-w-xl mx-auto">
+                        <div class="bg-blue-100 border-2 border-blue-300 rounded-xl p-2 sm:p-3">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-blue-700">1</div>
+                            <div class="text-xs sm:text-sm font-bold text-blue-900 mt-1">Puluhan</div>
+                            <div class="text-[11px] text-blue-600">(10)</div>
+                        </div>
+                        <div class="bg-blue-100 border-2 border-blue-300 rounded-xl p-2 sm:p-3">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-blue-700">2</div>
+                            <div class="text-xs sm:text-sm font-bold text-blue-900 mt-1">Satuan</div>
+                            <div class="text-[11px] text-blue-600">(2)</div>
+                        </div>
+                        <div class="bg-red-100 border-2 border-red-300 rounded-xl p-2 sm:p-3 flex flex-col justify-center items-center">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-red-600">,</div>
+                            <div class="text-xs font-bold text-red-800 mt-1">Tanda Koma</div>
+                        </div>
+                        <div class="bg-emerald-100 border-2 border-emerald-300 rounded-xl p-2 sm:p-3">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-700">3</div>
+                            <div class="text-xs sm:text-sm font-bold text-emerald-900 mt-1">Persepuluhan</div>
+                            <div class="text-[11px] text-emerald-700 font-bold">(3/10)</div>
+                        </div>
+                        <div class="bg-emerald-100 border-2 border-emerald-300 rounded-xl p-2 sm:p-3">
+                            <div class="text-2xl sm:text-3xl font-extrabold text-emerald-700">4</div>
+                            <div class="text-xs sm:text-sm font-bold text-emerald-900 mt-1">Perseratusan</div>
+                            <div class="text-[11px] text-emerald-700 font-bold">(4/100)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualisasi Interaktif Persepuluhan & Perseratusan -->
+                <div class="bg-sky-50 rounded-2xl p-5 border-2 border-sky-200">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-eye"></i> Laboratorium Kotak Pecahan & Desimal
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-600 mb-4">Geser tombol di bawah untuk melihat bagaimana kotak yang diwarnai berubah menjadi pecahan dan desimal!</p>
+
+                    <div class="flex flex-wrap gap-3 mb-4">
+                        <button onclick="setVisualMode(10)" id="mode-10-btn" class="px-4 py-2 rounded-xl font-bold bg-sky-600 text-white shadow">
+                            Mode Persepuluhan (10 Kotak)
+                        </button>
+                        <button onclick="setVisualMode(100)" id="mode-100-btn" class="px-4 py-2 rounded-xl font-bold bg-white text-sky-700 border-2 border-sky-300">
+                            Mode Perseratusan (100 Kotak)
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <!-- Area Kotak Visual -->
+                        <div class="bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-inner">
+                            <div id="visual-grid" class="grid-10 h-48 sm:h-56 w-full"></div>
+                        </div>
+
+                        <!-- Kontrol & Hasil -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">
+                                    Jumlah Kotak Diwarnai: <span id="shaded-count-label" class="text-sky-600 text-xl">3</span> dari <span id="total-count-label">10</span>
+                                </label>
+                                <input type="range" id="visual-slider" min="0" max="10" value="3" oninput="updateVisualGrid()" class="w-full h-3 bg-sky-200 rounded-lg appearance-none cursor-pointer accent-sky-600">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-white p-4 rounded-2xl border-2 border-indigo-200">
+                                    <div class="text-xs font-bold text-indigo-500 uppercase">Bentuk Pecahan</div>
+                                    <div id="visual-fraction" class="text-3xl font-extrabold text-indigo-700 mt-2">
+                                        <span class="fraction"><span class="fraction-top">3</span><span class="fraction-bottom">10</span></span>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl border-2 border-emerald-200">
+                                    <div class="text-xs font-bold text-emerald-500 uppercase">Bentuk Desimal</div>
+                                    <div id="visual-decimal" class="text-4xl font-extrabold text-emerald-600 mt-3">
+                                        0,3
+                                    </div>
+                                </div>
+                            </div>
+                            <p id="visual-explanation" class="text-sm text-slate-600 bg-white p-3 rounded-xl border border-slate-200">
+                                <strong>Cara baca:</strong> Nol koma tiga. Karena penyebutnya 10, ada <strong>1 angka</strong> di belakang koma.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="switchTab('tab-ubah')" class="btn-push bg-emerald-500 hover:bg-emerald-600 text-white font-fun font-bold px-6 py-3 rounded-2xl text-lg flex items-center gap-2">
+                    Lanjut: Cara Mengubah Pecahan ke Desimal <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 2: MENGUBAH PECAHAN MENJADI DESIMAL                   -->
+        <!-- ========================================================= -->
+        <section id="tab-ubah" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border-4 border-emerald-200 card-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-emerald-100 text-emerald-600 p-3 rounded-2xl text-2xl"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-emerald-700">2 Cara Jitu Mengubah Pecahan ke Desimal</h2>
+                </div>
+
+                <!-- CARA 1 -->
+                <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-emerald-200 mb-6">
+                    <span class="inline-block bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase mb-2">Cara Pertama (Paling Mudah!)</span>
+                    <h3 class="text-xl font-bold text-emerald-900 mb-2">Ubah Penyebut Menjadi 10 atau 100</h3>
+                    <p class="text-slate-700 mb-4">
+                        Ingat pasangan angka ajaib berikut agar penyebutnya berubah menjadi 10 atau 100:
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 text-center">
+                        <div class="bg-white p-3 rounded-xl border-2 border-emerald-300 shadow-sm">
+                            <div class="font-extrabold text-lg text-emerald-700">2 × 5 = 10</div>
+                            <div class="text-xs text-slate-500">Pasangan 2 adalah 5</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border-2 border-emerald-300 shadow-sm">
+                            <div class="font-extrabold text-lg text-emerald-700">4 × 25 = 100</div>
+                            <div class="text-xs text-slate-500">Pasangan 4 adalah 25</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border-2 border-emerald-300 shadow-sm">
+                            <div class="font-extrabold text-lg text-emerald-700">5 × 2 = 10</div>
+                            <div class="text-xs text-slate-500">Pasangan 5 adalah 2</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border-2 border-emerald-300 shadow-sm">
+                            <div class="font-extrabold text-lg text-emerald-700">20 × 5 = 100</div>
+                            <div class="text-xs text-slate-500">Pasangan 20 adalah 5</div>
+                        </div>
+                    </div>
+
+                    <!-- Contoh Soal Cara 1 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="font-bold text-emerald-800 mb-2">Contoh 1: Ubahlah <span class="fraction"><span class="fraction-top">3</span><span class="fraction-bottom">5</span></span> menjadi desimal!</div>
+                            <ol class="list-decimal list-inside text-sm sm:text-base space-y-1.5 text-slate-700">
+                                <li>Penyebutnya adalah <strong>5</strong>. Supaya jadi <strong>10</strong>, kita kalikan <strong>2</strong>.</li>
+                                <li>Pembilang dan penyebut sama-sama dikali 2:<br>
+                                    <span class="fraction"><span class="fraction-top">3 × 2</span><span class="fraction-bottom">5 × 2</span></span> = <span class="fraction"><span class="fraction-top">6</span><span class="fraction-bottom">10</span></span>
+                                </li>
+                                <li>Karena per 10 (1 angka di belakang koma), hasilnya adalah <strong class="text-emerald-600 text-lg">0,6</strong>.</li>
+                            </ol>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+                            <div class="font-bold text-emerald-800 mb-2">Contoh 2: Ubahlah <span class="fraction"><span class="fraction-top">1</span><span class="fraction-bottom">4</span></span> menjadi desimal!</div>
+                            <ol class="list-decimal list-inside text-sm sm:text-base space-y-1.5 text-slate-700">
+                                <li>Penyebutnya adalah <strong>4</strong>. Supaya jadi <strong>100</strong>, kita kalikan <strong>25</strong>.</li>
+                                <li>Pembilang dan penyebut sama-sama dikali 25:<br>
+                                    <span class="fraction"><span class="fraction-top">1 × 25</span><span class="fraction-bottom">4 × 25</span></span> = <span class="fraction"><span class="fraction-top">25</span><span class="fraction-bottom">100</span></span>
+                                </li>
+                                <li>Karena per 100 (2 angka di belakang koma), hasilnya adalah <strong class="text-emerald-600 text-lg">0,25</strong>.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARA 2 -->
+                <div class="bg-indigo-50 rounded-2xl p-5 border-2 border-indigo-200 mb-6">
+                    <span class="inline-block bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase mb-2">Cara Kedua</span>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-2">Pembagian Bersusun (Porogapit)</h3>
+                    <p class="text-slate-700 mb-3">
+                        Ingat bahwa tanda per pada pecahan artinya <strong>dibagi (÷)</strong>. Jadi <span class="fraction"><span class="fraction-top">3</span><span class="fraction-bottom">4</span></span> artinya <strong>3 ÷ 4</strong>.
+                    </p>
+                    <div class="bg-white p-4 rounded-2xl border border-indigo-200 flex flex-col sm:flex-row items-center gap-4">
+                        <div class="bg-indigo-100 p-4 rounded-xl font-mono text-base sm:text-lg font-bold text-indigo-900 min-w-[170px] text-center">
+                            <div>&nbsp;&nbsp;0,75</div>
+                            <div>4 ) 3,00</div>
+                            <div>&nbsp;&nbsp;&nbsp;2 8 -</div>
+                            <div>&nbsp;&nbsp;&nbsp;----</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20 -</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0</div>
+                        </div>
+                        <div class="text-sm sm:text-base text-slate-700 space-y-2">
+                            <p><strong>Langkah-langkah menghitung 3 ÷ 4:</strong></p>
+                            <p>1. 3 dibagi 4 tidak bisa, tulis <strong>0,</strong> di atas dan tambah angka 0 di belakang 3 menjadi <strong>30</strong>.</p>
+                            <p>2. 30 ÷ 4 yang paling dekat adalah <strong>7</strong> (karena 7 × 4 = 28). Sisa 30 - 28 = <strong>2</strong>.</p>
+                            <p>3. Tambah angka 0 lagi di belakang 2 menjadi <strong>20</strong>. Lalu 20 ÷ 4 = <strong>5</strong>. Sisa 0. Jadi hasilnya <strong>0,75</strong>!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MESIN KONVERTER INTERAKTIF -->
+                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-300">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-robot"></i> Mesin Pengubah Pecahan Otomatis
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-700 mb-4">Pilih salah satu pecahan di bawah ini untuk melihat langkah-langkah perubahannya secara ajaib!</p>
+
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <button onclick="showStepConverter(1, 2)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">1/2</button>
+                        <button onclick="showStepConverter(3, 4)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">3/4</button>
+                        <button onclick="showStepConverter(2, 5)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">2/5</button>
+                        <button onclick="showStepConverter(7, 10)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">7/10</button>
+                        <button onclick="showStepConverter(3, 20)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">3/20</button>
+                        <button onclick="showStepConverter(9, 25)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">9/25</button>
+                        <button onclick="showStepConverter(1, 8)" class="btn-push bg-white hover:bg-amber-100 border-2 border-amber-400 px-4 py-2 rounded-xl font-bold text-amber-900">1/8</button>
+                    </div>
+
+                    <div id="converter-result" class="bg-white p-5 rounded-2xl border-2 border-amber-200 shadow-sm">
+                        <div class="text-center text-slate-500 py-4">
+                            <i class="fa-solid fa-hand-pointer text-2xl text-amber-500 mb-2"></i>
+                            <p class="font-semibold">Klik salah satu tombol pecahan di atas untuk melihat cara menghitungnya!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchTab('tab-konsep')" class="btn-push bg-slate-200 hover:bg-slate-300 text-slate-700 font-fun font-bold px-5 py-3 rounded-2xl flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+                </button>
+                <button onclick="switchTab('tab-urut')" class="btn-push bg-purple-600 hover:bg-purple-700 text-white font-fun font-bold px-6 py-3 rounded-2xl text-lg flex items-center gap-2">
+                    Lanjut: Mengurutkan Desimal <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 3: MENGURUTKAN BILANGAN DESIMAL                       -->
+        <!-- ========================================================= -->
+        <section id="tab-urut" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border-4 border-purple-200 card-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-purple-100 text-purple-600 p-3 rounded-2xl text-2xl"><i class="fa-solid fa-arrow-up-1-9"></i></span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-purple-700">Cara Mudah Mengurutkan Bilangan Desimal</h2>
+                </div>
+
+                <!-- Peringatan Jebakan -->
+                <div class="bg-rose-50 border-l-8 border-rose-500 p-4 rounded-2xl mb-6">
+                    <h3 class="font-bold text-rose-800 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Hati-Hati Jebakan!
+                    </h3>
+                    <p class="text-slate-700 mt-1">
+                        Banyak anak mengira <strong>0,25 lebih besar dari 0,5</strong> karena angka 25 lebih besar dari 5. <strong>ITU SALAH YA!</strong><br>
+                        Ingat: <span class="font-bold text-emerald-700">0,5 sama dengan 0,50</span>. Jadi <strong>0,50 lebih besar daripada 0,25</strong>!
+                    </p>
+                </div>
+
+                <!-- 3 Langkah Rahasia -->
+                <div class="bg-purple-50 rounded-2xl p-5 border-2 border-purple-200 mb-6">
+                    <h3 class="text-xl font-bold text-purple-900 mb-3">3 Langkah Rahasia Mengurutkan Desimal:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-purple-200">
+                            <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center mb-2">1</div>
+                            <h4 class="font-bold text-purple-900 mb-1">Sejajarkan Tanda Koma</h4>
+                            <p class="text-sm text-slate-600">Susun semua bilangan ke bawah dengan tanda koma (,) yang lurus sejajar.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-purple-200">
+                            <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center mb-2">2</div>
+                            <h4 class="font-bold text-purple-900 mb-1">Samakan Jumlah Angka</h4>
+                            <p class="text-sm text-slate-600">Tambahkan angka <strong>0</strong> di paling belakang agar panjang angka di belakang koma sama semua.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-purple-200">
+                            <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center mb-2">3</div>
+                            <h4 class="font-bold text-purple-900 mb-1">Bandingkan dari Kiri</h4>
+                            <p class="text-sm text-slate-600">Bandingkan angka dari yang paling kiri (satuan, lalu persepuluhan, lalu perseratusan).</p>
+                        </div>
+                    </div>
+
+                    <!-- Contoh Soal Mengurutkan -->
+                    <div class="mt-5 bg-white p-5 rounded-2xl border border-purple-200">
+                        <h4 class="font-bold text-purple-900 text-lg mb-2">Contoh Soal:</h4>
+                        <p class="text-slate-700 mb-3">Urutkan bilangan berikut dari yang <strong>terkecil ke terbesar</strong>: <span class="font-bold bg-purple-100 px-2 py-1 rounded">0,6</span> ; <span class="font-bold bg-purple-100 px-2 py-1 rounded">0,25</span> ; <span class="font-bold bg-purple-100 px-2 py-1 rounded">1,2</span> ; <span class="font-bold bg-purple-100 px-2 py-1 rounded">0,48</span></p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-slate-50 p-4 rounded-xl">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 uppercase mb-1">Kita samakan jadi 2 angka di belakang koma:</div>
+                                <ul class="font-mono text-base space-y-1">
+                                    <li>0,6 &nbsp;→ <strong>0,60</strong></li>
+                                    <li>0,25 → <strong>0,25</strong></li>
+                                    <li>1,2 &nbsp;→ <strong>1,20</strong></li>
+                                    <li>0,48 → <strong>0,48</strong></li>
+                                </ul>
+                            </div>
+                            <div class="text-sm sm:text-base text-slate-700 space-y-2">
+                                <p>Sekarang lihat angkanya seperti 60, 25, 120, dan 48!</p>
+                                <p>Urutan dari yang <strong>terkecil</strong> adalah:<br>
+                                <span class="inline-block mt-1 bg-emerald-100 text-emerald-900 font-bold px-3 py-1 rounded-lg">0,25 ; 0,48 ; 0,6 ; 1,2</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MINI GAME MENGURUTKAN DESIMAL -->
+                <div class="bg-sky-50 rounded-2xl p-5 border-2 border-sky-300">
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                        <h3 class="text-xl font-bold text-sky-900 flex items-center gap-2">
+                            <i class="fa-solid fa-gamepad"></i> Tantangan Susun Kereta Desimal!
+                        </h3>
+                        <button onclick="generateSortGame()" class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold px-3 py-1.5 rounded-xl">
+                            <i class="fa-solid fa-rotate"></i> Soal Baru
+                        </button>
+                    </div>
+                    <p id="sort-instruction" class="text-base font-bold text-indigo-700 mb-4">
+                        Klik kartu angka di bawah dari yang TERKECIL ke TERBESAR!
+                    </p>
+
+                    <!-- Area Gerbong Jawaban -->
+                    <div class="mb-4">
+                        <div class="text-xs font-bold text-slate-500 uppercase mb-1">Urutan Pilihanmu:</div>
+                        <div id="sort-slots" class="min-h-[68px] bg-white border-2 border-dashed border-sky-400 rounded-2xl p-3 flex flex-wrap gap-3 items-center">
+                            <span class="text-slate-400 text-sm italic">Klik kartu angka di bawah untuk memasukkannya ke sini...</span>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Pilihan -->
+                    <div class="mb-4">
+                        <div class="text-xs font-bold text-slate-500 uppercase mb-1">Kartu Angka (Klik untuk memilih):</div>
+                        <div id="sort-pool" class="flex flex-wrap gap-3"></div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <button onclick="checkSortGame()" class="btn-push bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-xl">
+                            <i class="fa-solid fa-check"></i> Periksa Urutanku
+                        </button>
+                        <button onclick="resetSortSelection()" class="btn-push bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold px-4 py-2.5 rounded-xl">
+                            <i class="fa-solid fa-eraser"></i> Ulangi
+                        </button>
+                    </div>
+                    <div id="sort-feedback" class="mt-3 font-bold text-base"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button onclick="switchTab('tab-ubah')" class="btn-push bg-slate-200 hover:bg-slate-300 text-slate-700 font-fun font-bold px-5 py-3 rounded-2xl flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+                </button>
+                <button onclick="switchTab('tab-kuis')" class="btn-push bg-amber-500 hover:bg-amber-600 text-white font-fun font-bold px-6 py-3 rounded-2xl text-lg flex items-center gap-2">
+                    Ayo Kerjakan Kuis Berhadiah Bintang! <i class="fa-solid fa-trophy"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 4: LATIHAN SOAL & KUIS INTERAKTIF                     -->
+        <!-- ========================================================= -->
+        <section id="tab-kuis" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border-4 border-amber-300 card-shadow">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-100 text-amber-600 p-3 rounded-2xl text-2xl"><i class="fa-solid fa-trophy"></i></span>
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-amber-700">Kuis Pintar Kelas 4 SD</h2>
+                            <p class="text-sm text-slate-600">Jawab 10 soal berikut dan kumpulkan semua bintangnya!</p>
+                        </div>
+                    </div>
+                    <div class="bg-amber-100 text-amber-900 font-bold px-4 py-2 rounded-2xl">
+                        Soal <span id="quiz-number">1</span> dari 10
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden mb-6">
+                    <div id="quiz-progress" class="bg-amber-500 h-full transition-all duration-300" style="width: 10%;"></div>
+                </div>
+
+                <!-- Area Soal -->
+                <div id="quiz-container" class="space-y-5">
+                    <div class="bg-sky-50 p-5 sm:p-6 rounded-2xl border-2 border-sky-200">
+                        <span id="quiz-category" class="inline-block bg-sky-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Mengubah Pecahan</span>
+                        <div id="quiz-question" class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+                            Memuat soal...
+                        </div>
+                    </div>
+
+                    <!-- Pilihan Jawaban -->
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+                    <!-- Pembahasan Soal -->
+                    <div id="quiz-explanation" class="hidden p-4 rounded-2xl border-2"></div>
+
+                    <!-- Tombol Next -->
+                    <div class="flex justify-end">
+                        <button id="quiz-next-btn" onclick="nextQuestion()" class="hidden btn-push bg-blue-600 hover:bg-blue-700 text-white font-fun font-bold px-6 py-3 rounded-2xl text-lg flex items-center gap-2">
+                            Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Layar Hasil Akhir Kuis -->
+                <div id="quiz-result-screen" class="hidden text-center py-6 space-y-4">
+                    <div class="text-6xl text-yellow-400 animate-bounce">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-800">Hebat Sekali! Kuis Selesai!</h3>
+                    <p class="text-lg text-slate-600">Kamu berhasil menjawab benar <strong id="final-correct" class="text-emerald-600 text-2xl">0</strong> dari 10 soal!</p>
+                    <div id="final-message" class="max-w-md mx-auto bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl text-amber-900 font-semibold"></div>
+                    <button onclick="restartQuiz()" class="btn-push bg-emerald-500 hover:bg-emerald-600 text-white font-fun font-bold px-6 py-3 rounded-2xl text-lg inline-flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis Lagi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-slate-500 text-sm">
+        Dibuat khusus untuk membantu siswa Kelas 4 SD belajar Matematika dengan gembira!
+    </footer>
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT INTERAKTIF                                     -->
+    <!-- ========================================================= -->
+    <script>
+        // --- SOUND EFFECTS MENGGUNAKAN TONE.JS ---
+        let synth;
+        function playSound(type) {
+            try {
+                if (!synth) {
+                    synth = new Tone.PolySynth(Tone.Synth).toDestination();
+                }
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
+                if (type === 'correct') {
+                    synth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
+                } else if (type === 'wrong') {
+                    synth.triggerAttackRelease(["A3", "G#3"], "8n");
+                } else if (type === 'click') {
+                    synth.triggerAttackRelease(["C5"], "32n");
+                }
+            } catch (e) {
+                // Abaikan jika audio diblokir browser
+            }
+        }
+
+        // --- MANAJEMEN BINTANG / SKOR ---
+        let totalStars = 0;
+        function addStars(amount) {
+            totalStars += amount;
+            document.getElementById('total-stars').textContent = totalStars;
+        }
+
+        // --- NAVIGASI TAB ---
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-yellow-400', 'text-blue-950', 'shadow');
+                btn.classList.add('bg-white/15', 'text-white');
+            });
+
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('bg-white/15', 'text-white');
+            activeBtn.classList.add('bg-yellow-400', 'text-blue-950', 'shadow');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- TAB 1: LABORATORIUM VISUAL KOTAK ---
+        let currentVisualMax = 10;
+        function setVisualMode(max) {
+            playSound('click');
+            currentVisualMax = max;
+            const slider = document.getElementById('visual-slider');
+            slider.max = max;
+            slider.value = max === 10 ? 3 : 35;
+
+            document.getElementById('total-count-label').textContent = max;
+            const grid = document.getElementById('visual-grid');
+            grid.className = max === 10 ? 'grid-10 h-48 sm:h-56 w-full' : 'grid-100 h-48 sm:h-56 w-full';
+
+            const btn10 = document.getElementById('mode-10-btn');
+            const btn100 = document.getElementById('mode-100-btn');
+            if (max === 10) {
+                btn10.className = 'px-4 py-2 rounded-xl font-bold bg-sky-600 text-white shadow';
+                btn100.className = 'px-4 py-2 rounded-xl font-bold bg-white text-sky-700 border-2 border-sky-300';
+            } else {
+                btn100.className = 'px-4 py-2 rounded-xl font-bold bg-sky-600 text-white shadow';
+                btn10.className = 'px-4 py-2 rounded-xl font-bold bg-white text-sky-700 border-2 border-sky-300';
+            }
+            updateVisualGrid();
+        }
+
+        function updateVisualGrid() {
+            const val = parseInt(document.getElementById('visual-slider').value);
+            document.getElementById('shaded-count-label').textContent = val;
+
+            const grid = document.getElementById('visual-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < currentVisualMax; i++) {
+                const cell = document.createElement('div');
+                cell.className = `rounded transition-colors duration-150 ${i < val ? 'bg-sky-500 border border-sky-600' : 'bg-slate-100 border border-slate-300'}`;
+                grid.appendChild(cell);
+            }
+
+            // Update pecahan & desimal
+            document.getElementById('visual-fraction').innerHTML = `
+                <span class="fraction"><span class="fraction-top">${val}</span><span class="fraction-bottom">${currentVisualMax}</span></span>
+            `;
+
+            let decStr = '';
+            if (currentVisualMax === 10) {
+                decStr = val === 10 ? '1,0' : `0,${val}`;
+                document.getElementById('visual-explanation').innerHTML = `
+                    <strong>Cara baca:</strong> ${val === 10 ? 'Satu koma nol (1 utuh)' : 'Nol koma ' + val}. Karena penyebutnya 10, ada <strong>1 angka</strong> di belakang koma.
+                `;
+            } else {
+                if (val === 100) {
+                    decStr = '1,00';
+                } else if (val < 10) {
+                    decStr = `0,0${val}`;
+                } else {
+                    decStr = `0,${val}`;
+                }
+                document.getElementById('visual-explanation').innerHTML = `
+                    <strong>Cara baca:</strong> ${decStr.replace(',', ' koma ')}. Karena penyebutnya 100, harus ada <strong>2 angka</strong> di belakang koma!
+                `;
+            }
+            document.getElementById('visual-decimal').textContent = decStr;
+        }
+
+        // --- TAB 2: MESIN KONVERTER LANGKAH DEMI LANGKAH ---
+        const converterData = {
+            "1/2": {
+                method: "Mengubah penyebut menjadi 10",
+                mult: 5,
+                newNum: 5,
+                newDen: 10,
+                dec: "0,5",
+                note: "Karena 2 × 5 = 10, pembilang dan penyebut dikalikan 5."
+            },
+            "3/4": {
+                method: "Mengubah penyebut menjadi 100",
+                mult: 25,
+                newNum: 75,
+                newDen: 100,
+                dec: "0,75",
+                note: "Karena 4 × 25 = 100, pembilang dan penyebut dikalikan 25."
+            },
+            "2/5": {
+                method: "Mengubah penyebut menjadi 10",
+                mult: 2,
+                newNum: 4,
+                newDen: 10,
+                dec: "0,4",
+                note: "Karena 5 × 2 = 10, pembilang dan penyebut dikalikan 2."
+            },
+            "7/10": {
+                method: "Penyebut sudah 10!",
+                mult: 1,
+                newNum: 7,
+                newDen: 10,
+                dec: "0,7",
+                note: "Penyebutnya sudah 10, langsung tulis 1 angka di belakang koma."
+            },
+            "3/20": {
+                method: "Mengubah penyebut menjadi 100",
+                mult: 5,
+                newNum: 15,
+                newDen: 100,
+                dec: "0,15",
+                note: "Karena 20 × 5 = 100, pembilang dan penyebut dikalikan 5."
+            },
+            "9/25": {
+                method: "Mengubah penyebut menjadi 100",
+                mult: 4,
+                newNum: 36,
+                newDen: 100,
+                dec: "0,36",
+                note: "Karena 25 × 4 = 100, pembilang dan penyebut dikalikan 4."
+            },
+            "1/8": {
+                method: "Pembagian Bersusun (Porogapit)",
+                mult: null,
+                dec: "0,125",
+                note: "8 tidak bisa dikali bilangan bulat jadi 10 atau 100 (bisa jadi 1.000 dengan ×125 = 125/1000), atau langsung hitung 1 ÷ 8 = 0,125."
+            }
+        };
+
+        function showStepConverter(num, den) {
+            playSound('click');
+            const key = `${num}/${den}`;
+            const data = converterData[key];
+            const box = document.getElementById('converter-result');
+
+            if (data.mult) {
+                box.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">${data.method}</div>
+                        <div class="flex flex-wrap items-center justify-center gap-3 text-xl sm:text-2xl font-bold bg-slate-50 p-4 rounded-xl">
+                            <span class="fraction"><span class="fraction-top">${num}</span><span class="fraction-bottom">${den}</span></span>
+                            <span>=</span>
+                            <span class="fraction"><span class="fraction-top">${num} × ${data.mult}</span><span class="fraction-bottom">${den} × ${data.mult}</span></span>
+                            <span>=</span>
+                            <span class="fraction text-indigo-700"><span class="fraction-top">${data.newNum}</span><span class="fraction-bottom">${data.newDen}</span></span>
+                            <span>=</span>
+                            <span class="bg-emerald-500 text-white px-4 py-1.5 rounded-xl text-2xl sm:text-3xl shadow">${data.dec}</span>
+                        </div>
+                        <p class="text-sm sm:text-base text-slate-700 text-center"><i class="fa-solid fa-circle-info text-sky-500"></i> ${data.note}</p>
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">${data.method}</div>
+                        <div class="flex flex-wrap items-center justify-center gap-3 text-xl sm:text-2xl font-bold bg-slate-50 p-4 rounded-xl">
+                            <span class="fraction"><span class="fraction-top">${num}</span><span class="fraction-bottom">${den}</span></span>
+                            <span>=</span>
+                            <span>${num} ÷ ${den}</span>
+                            <span>=</span>
+                            <span class="bg-emerald-500 text-white px-4 py-1.5 rounded-xl text-2xl sm:text-3xl shadow">${data.dec}</span>
+                        </div>
+                        <p class="text-sm sm:text-base text-slate-700 text-center"><i class="fa-solid fa-circle-info text-sky-500"></i> ${data.note}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- TAB 3: MINI GAME MENGURUTKAN DESIMAL ---
+        const sortChallenges = [
+            { order: 'asc', label: 'TERKECIL ke TERBESAR', nums: ['0,7', '0,25', '0,9', '0,45'] },
+            { order: 'desc', label: 'TERBESAR ke TERKECIL', nums: ['1,4', '0,85', '2,1', '1,09'] },
+            { order: 'asc', label: 'TERKECIL ke TERBESAR', nums: ['0,5', '0,15', '0,55', '0,05'] },
+            { order: 'desc', label: 'TERBESAR ke TERKECIL', nums: ['3,2', '3,08', '3,75', '2,99'] },
+            { order: 'asc', label: 'TERKECIL ke TERBESAR', nums: ['0,8', '0,32', '1,1', '0,64'] }
+        ];
+        let currentSortIdx = 0;
+        let selectedSortItems = [];
+        let sortSolved = false;
+
+        function generateSortGame() {
+            playSound('click');
+            currentSortIdx = (currentSortIdx + 1) % sortChallenges.length;
+            renderSortGame();
+        }
+
+        function renderSortGame() {
+            const challenge = sortChallenges[currentSortIdx];
+            selectedSortItems = [];
+            sortSolved = false;
+            document.getElementById('sort-instruction').innerHTML = `Klik kartu angka di bawah dari yang <span class="underline text-rose-600">${challenge.label}</span>!`;
+            document.getElementById('sort-feedback').innerHTML = '';
+
+            updateSortUI();
+        }
+
+        function updateSortUI() {
+            const challenge = sortChallenges[currentSortIdx];
+            const slotsEl = document.getElementById('sort-slots');
+            const poolEl = document.getElementById('sort-pool');
+
+            if (selectedSortItems.length === 0) {
+                slotsEl.innerHTML = '<span class="text-slate-400 text-sm italic">Klik kartu angka di bawah untuk memasukkannya ke sini...</span>';
+            } else {
+                slotsEl.innerHTML = selectedSortItems.map((val, idx) => `
+                    <div class="bg-emerald-500 text-white font-extrabold text-xl px-4 py-2 rounded-xl shadow flex items-center gap-2">
+                        <span class="text-xs bg-emerald-700 px-1.5 py-0.5 rounded">${idx + 1}</span> ${val}
+                    </div>
+                `).join('');
+            }
+
+            poolEl.innerHTML = challenge.nums.map(val => {
+                const isSelected = selectedSortItems.includes(val);
+                return `
+                    <button onclick="selectSortCard('${val}')" ${isSelected ? 'disabled' : ''} class="btn-push px-5 py-3 rounded-2xl font-extrabold text-xl border-2 ${isSelected ? 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed' : 'bg-white hover:bg-sky-100 text-sky-800 border-sky-400'}">
+                        ${val}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectSortCard(val) {
+            if (!selectedSortItems.includes(val)) {
+                playSound('click');
+                selectedSortItems.push(val);
+                updateSortUI();
+            }
+        }
+
+        function resetSortSelection() {
+            playSound('click');
+            selectedSortItems = [];
+            document.getElementById('sort-feedback').innerHTML = '';
+            updateSortUI();
+        }
+
+        function checkSortGame() {
+            const challenge = sortChallenges[currentSortIdx];
+            const fb = document.getElementById('sort-feedback');
+
+            if (selectedSortItems.length < challenge.nums.length) {
+                fb.innerHTML = '<span class="text-amber-600"><i class="fa-solid fa-circle-exclamation"></i> Pilih semua kartu angkanya dulu ya!</span>';
+                return;
+            }
+
+            const parseIndoFloat = s => parseFloat(s.replace(',', '.'));
+            const expected = [...challenge.nums].sort((a, b) => {
+                return challenge.order === 'asc'
+                    ? parseIndoFloat(a) - parseIndoFloat(b)
+                    : parseIndoFloat(b) - parseIndoFloat(a);
+            });
+
+            const isCorrect = selectedSortItems.every((v, i) => v === expected[i]);
+            if (isCorrect) {
+                playSound('correct');
+                fb.innerHTML = '<span class="text-emerald-600"><i class="fa-solid fa-star"></i> Luar biasa! Urutanmu 100% BENAR! (+2 Bintang)</span>';
+                if (!sortSolved) {
+                    addStars(2);
+                    sortSolved = true;
+                }
+            } else {
+                playSound('wrong');
+                fb.innerHTML = `<span class="text-rose-600"><i class="fa-solid fa-xmark"></i> Belum tepat. Coba samakan jumlah angka di belakang koma lalu klik Ulangi!</span>`;
+            }
+        }
+
+        // --- TAB 4: KUIS 10 SOAL LENGKAP ---
+        const quizQuestions = [
+            {
+                cat: "Konsep Desimal",
+                q: "Pada bilangan desimal 4,75, angka 7 menempati nilai tempat...",
+                options: ["Satuan", "Persepuluhan", "Perseratusan", "Puluhan"],
+                ans: 1,
+                exp: "Angka pertama di belakang koma (sebelah kanan koma) selalu menempati nilai tempat <strong>persepuluhan</strong>."
+            },
+            {
+                cat: "Ubah Pecahan ke Desimal",
+                q: "Bentuk desimal dari pecahan <span class='fraction'><span class='fraction-top'>4</span><span class='fraction-bottom'>10</span></span> adalah...",
+                options: ["4,0", "0,04", "0,4", "1,4"],
+                ans: 2,
+                exp: "Karena penyebutnya 10, maka ada 1 angka di belakang koma. Jadi <span class='fraction'><span class='fraction-top'>4</span><span class='fraction-bottom'>10</span></span> = <strong>0,4</strong>."
+            },
+            {
+                cat: "Ubah Pecahan ke Desimal",
+                q: "Bentuk desimal dari pecahan <span class='fraction'><span class='fraction-top'>1</span><span class='fraction-bottom'>2</span></span> adalah...",
+                options: ["0,2", "0,5", "1,2", "0,12"],
+                ans: 1,
+                exp: "Kalikan pembilang dan penyebut dengan 5: <span class='fraction'><span class='fraction-top'>1×5</span><span class='fraction-bottom'>2×5</span></span> = <span class='fraction'><span class='fraction-top'>5</span><span class='fraction-bottom'>10</span></span> = <strong>0,5</strong>."
+            },
+            {
+                cat: "Ubah Pecahan ke Desimal",
+                q: "Ubahlah pecahan <span class='fraction'><span class='fraction-top'>3</span><span class='fraction-bottom'>4</span></span> menjadi bentuk desimal!",
+                options: ["0,34", "0,75", "0,25", "3,4"],
+                ans: 1,
+                exp: "Kalikan pembilang dan penyebut dengan 25: <span class='fraction'><span class='fraction-top'>3×25</span><span class='fraction-bottom'>4×25</span></span> = <span class='fraction'><span class='fraction-top'>75</span><span class='fraction-bottom'>100</span></span> = <strong>0,75</strong>."
+            },
+            {
+                cat: "Ubah Pecahan ke Desimal",
+                q: "Bentuk desimal dari <span class='fraction'><span class='fraction-top'>9</span><span class='fraction-bottom'>100</span></span> adalah...",
+                options: ["0,9", "9,1", "0,09", "0,90"],
+                ans: 2,
+                exp: "Karena per 100 harus ada <strong>2 angka</strong> di belakang koma, maka kita tambahkan 0 di depan angka 9 menjadi <strong>0,09</strong>."
+            },
+            {
+                cat: "Membandingkan Desimal",
+                q: "Tanda perbandingan yang tepat untuk <strong>0,6 ... 0,45</strong> adalah...",
+                options: ["< (lebih kecil)", "> (lebih besar)", "= (sama dengan)", "Tidak bisa dibandingkan"],
+                ans: 1,
+                exp: "Samakan panjang komanya: 0,6 sama dengan <strong>0,60</strong>. Karena 0,60 lebih besar dari 0,45, tandanya adalah <strong>></strong>."
+            },
+            {
+                cat: "Mengurutkan Desimal",
+                q: "Urutan bilangan desimal berikut dari yang <strong>terkecil ke terbesar</strong> adalah: 0,8 ; 0,25 ; 0,5",
+                options: ["0,8 ; 0,5 ; 0,25", "0,5 ; 0,8 ; 0,25", "0,25 ; 0,5 ; 0,8", "0,25 ; 0,8 ; 0,5"],
+                ans: 2,
+                exp: "Ubah menjadi 2 angka di belakang koma: 0,80 ; 0,25 ; 0,50. Urutan dari terkecil adalah <strong>0,25 ; 0,5 ; 0,8</strong>."
+            },
+            {
+                cat: "Mengurutkan Desimal",
+                q: "Urutan bilangan berikut dari yang <strong>terbesar ke terkecil</strong> adalah: 1,2 ; 0,95 ; 1,05",
+                options: ["1,2 ; 1,05 ; 0,95", "1,05 ; 1,2 ; 0,95", "0,95 ; 1,05 ; 1,2", "1,2 ; 0,95 ; 1,05"],
+                ans: 0,
+                exp: "Samakan menjadi 2 angka di belakang koma: 1,20 ; 0,95 ; 1,05. Yang terbesar adalah 1,20 (1,2), lalu 1,05, lalu 0,95."
+            },
+            {
+                cat: "Soal Cerita",
+                q: "Ibu membeli <span class='fraction'><span class='fraction-top'>2</span><span class='fraction-bottom'>5</span></span> kg gula pasir. Berat gula pasir ibu dalam bentuk desimal adalah...",
+                options: ["0,2 kg", "0,25 kg", "0,4 kg", "2,5 kg"],
+                ans: 2,
+                exp: "<span class='fraction'><span class='fraction-top'>2</span><span class='fraction-bottom'>5</span></span> dikalikan 2 menjadi <span class='fraction'><span class='fraction-top'>4</span><span class='fraction-bottom'>10</span></span>, sehingga bentuk desimalnya adalah <strong>0,4 kg</strong>."
+            },
+            {
+                cat: "Soal Cerita",
+                q: "Tinggi lompatan Andi 1,35 m, Budi 1,4 m, dan Caca 1,28 m. Siapakah yang lompatannya <strong>paling tinggi</strong>?",
+                options: ["Andi", "Budi", "Caca", "Andi dan Budi sama tinggi"],
+                ans: 1,
+                exp: "Andi = 1,35 m, Budi = 1,40 m, Caca = 1,28 m. Jadi yang paling tinggi lompatannya adalah <strong>Budi (1,4 m)</strong>."
+            }
+        ];
+
+        let currentQuizIdx = 0;
+        let quizScore = 0;
+        let questionAnswered = false;
+
+        function renderQuizQuestion() {
+            questionAnswered = false;
+            const item = quizQuestions[currentQuizIdx];
+            document.getElementById('quiz-number').textContent = currentQuizIdx + 1;
+            document.getElementById('quiz-progress').style.width = `${((currentQuizIdx + 1) / quizQuestions.length) * 100}%`;
+            document.getElementById('quiz-category').textContent = item.cat;
+            document.getElementById('quiz-question').innerHTML = item.q;
+            document.getElementById('quiz-explanation').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            const letters = ['A', 'B', 'C', 'D'];
+            const optionsEl = document.getElementById('quiz-options');
+            optionsEl.innerHTML = item.options.map((opt, idx) => `
+                <button onclick="answerQuiz(${idx})" id="opt-btn-${idx}" class="quiz-opt-btn text-left p-4 rounded-2xl border-2 border-slate-200 bg-white hover:bg-sky-50 hover:border-sky-400 font-bold text-base sm:text-lg transition flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-extrabold shrink-0">${letters[idx]}</span>
+                    <span>${opt}</span>
+                </button>
+            `).join('');
+        }
+
+        function answerQuiz(selectedIdx) {
+            if (questionAnswered) return;
+            questionAnswered = true;
+
+            const item = quizQuestions[currentQuizIdx];
+            const expEl = document.getElementById('quiz-explanation');
+            const buttons = document.querySelectorAll('.quiz-opt-btn');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIdx === item.ans) {
+                playSound('correct');
+                quizScore++;
+                addStars(1);
+                document.getElementById(`opt-btn-${selectedIdx}`).classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                expEl.className = 'p-4 rounded-2xl border-2 bg-emerald-50 border-emerald-300 text-emerald-900';
+                expEl.innerHTML = `<div class="font-bold text-lg mb-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> Benar Sekali! (+1 Bintang)</div><p class="text-sm sm:text-base">${item.exp}</p>`;
+            } else {
+                playSound('wrong');
+                document.getElementById(`opt-btn-${selectedIdx}`).classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                document.getElementById(`opt-btn-${item.ans}`).classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                expEl.className = 'p-4 rounded-2xl border-2 bg-rose-50 border-rose-300 text-rose-900';
+                expEl.innerHTML = `<div class="font-bold text-lg mb-1"><i class="fa-solid fa-circle-xmark text-rose-600"></i> Kurang Tepat!</div><p class="text-sm sm:text-base">${item.exp}</p>`;
+            }
+
+            expEl.classList.remove('hidden');
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.innerHTML = currentQuizIdx === quizQuestions.length - 1
+                ? 'Lihat Hasil Akhir <i class="fa-solid fa-flag-checkered"></i>'
+                : 'Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>';
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            if (currentQuizIdx < quizQuestions.length - 1) {
+                currentQuizIdx++;
+                renderQuizQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            playSound('correct');
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+            document.getElementById('final-correct').textContent = quizScore;
+
+            const msgEl = document.getElementById('final-message');
+            if (quizScore >= 8) {
+                msgEl.textContent = "Luar biasa! Kamu sudah sangat mahir mengubah pecahan ke desimal dan mengurutkan bilangan desimal!";
+            } else if (quizScore >= 5) {
+                msgEl.textContent = "Bagus sekali! Terus berlatih agar nilaimu makin sempurna ya!";
+            } else {
+                msgEl.textContent = "Semangat belajar! Yuk baca kembali materi di Tab 1-3 lalu coba kuis ini lagi!";
+            }
+        }
+
+        function restartQuiz() {
+            playSound('click');
+            currentQuizIdx = 0;
+            quizScore = 0;
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        // --- INISIALISASI SAAT HALAMAN DIMUAT ---
+        window.onload = function() {
+            updateVisualGrid();
+            renderSortGame();
+            renderQuizQuestion();
+        };
+    </script>
+</body>
+</html>
